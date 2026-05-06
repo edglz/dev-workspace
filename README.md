@@ -1,6 +1,5 @@
 # dev-workspace
 
-[![lint](https://github.com/edglz/dev-workspace/actions/workflows/lint.yml/badge.svg)](https://github.com/edglz/dev-workspace/actions/workflows/lint.yml)
 [![release](https://img.shields.io/github/v/release/edglz/dev-workspace?display_name=tag)](https://github.com/edglz/dev-workspace/releases)
 [![license](https://img.shields.io/github/license/edglz/dev-workspace)](LICENSE)
 [![PowerShell 7+](https://img.shields.io/badge/PowerShell-7%2B-5391FE?logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
@@ -111,7 +110,6 @@ dev-workspace/
   install.ps1                     Idempotent installer
   .gitignore
   .github/
-    workflows/lint.yml            PSScriptAnalyzer on push and PR
     ISSUE_TEMPLATE/               bug + feature templates
     pull_request_template.md
 ```

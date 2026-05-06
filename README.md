@@ -1,11 +1,13 @@
 # dev-workspace
 
+[github.com/edglz/dev-workspace](https://github.com/edglz/dev-workspace)
+
 A reproducible Windows + PowerShell 7 development environment: 64 modern CLI tools, sensible aliases, a discoverable PowerShell profile, and a Claude Code permission policy that auto-approves safe commands while still asking before destructive ones.
 
 ## Quick start
 
 ```powershell
-git clone https://github.com/<you>/dev-workspace.git
+git clone https://github.com/edglz/dev-workspace.git
 cd dev-workspace
 .\install.ps1
 ```

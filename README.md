@@ -1,6 +1,9 @@
 # dev-workspace
 
-[github.com/edglz/dev-workspace](https://github.com/edglz/dev-workspace)
+[![lint](https://github.com/edglz/dev-workspace/actions/workflows/lint.yml/badge.svg)](https://github.com/edglz/dev-workspace/actions/workflows/lint.yml)
+[![release](https://img.shields.io/github/v/release/edglz/dev-workspace?display_name=tag)](https://github.com/edglz/dev-workspace/releases)
+[![license](https://img.shields.io/github/license/edglz/dev-workspace)](LICENSE)
+[![PowerShell 7+](https://img.shields.io/badge/PowerShell-7%2B-5391FE?logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
 
 A reproducible Windows + PowerShell 7 development environment: 64 modern CLI tools, sensible aliases, a discoverable PowerShell profile, and a Claude Code permission policy that auto-approves safe commands while still asking before destructive ones.
 
@@ -100,11 +103,17 @@ The `hooks.PreToolUse` entry routes Bash calls through `rtk hook claude` (RTK is
 ```
 dev-workspace/
   README.md                       this file
+  CHANGELOG.md                    release notes
+  LICENSE                         MIT
   profile.ps1                     PowerShell 7+ profile (CurrentUserAllHosts)
   windowsPowerShell-stub.ps1      Stub that makes Windows PowerShell 5.1 source profile.ps1
   settings.template.json          Claude Code settings template
   install.ps1                     Idempotent installer
   .gitignore
+  .github/
+    workflows/lint.yml            PSScriptAnalyzer on push and PR
+    ISSUE_TEMPLATE/               bug + feature templates
+    pull_request_template.md
 ```
 
 ## Re-sync after pulling

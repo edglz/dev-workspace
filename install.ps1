@@ -72,7 +72,7 @@ if (-not $SkipScoop) {
         'nodejs','bun','pnpm','deno','python','go','temurin21-jdk','gradle','maven','mise',
         'gh','atac','grpcurl','mongosh','supabase','ngrok','cloudflared',
         'kubectl','k9s','kubectx','kubens','helm','stern','dive','minikube','kind',
-        'terraform','pulumi','flutter','glow','rclone'
+        'terraform','pulumi','flutter','glow','rclone','oh-my-posh'
     )
 
     Write-Step "Scoop packages ($($packages.Count))"
@@ -117,6 +117,10 @@ if (-not $SkipProfile) {
     New-Item -ItemType Directory -Path (Split-Path $allHosts) -Force | Out-Null
     Copy-Item "$root\profile.ps1" $allHosts -Force
     Write-Done $allHosts
+
+    $ompTheme = Join-Path (Split-Path $allHosts) 'workspace.omp.json'
+    Copy-Item "$root\workspace.omp.json" $ompTheme -Force
+    Write-Done $ompTheme
 
     $winPs = "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
     New-Item -ItemType Directory -Path (Split-Path $winPs) -Force | Out-Null

@@ -25,6 +25,15 @@ if (-not (Get-Module PSFzf)) {
     }
 }
 
+# Oh My Posh - prompt themed to match the workspace palette.
+# Theme lives next to this profile so install.ps1 ships them together.
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    $ompTheme = Join-Path $PSScriptRoot 'workspace.omp.json'
+    if (Test-Path $ompTheme) {
+        oh-my-posh init pwsh --config $ompTheme | Invoke-Expression
+    }
+}
+
 # Tool catalog. Probe overrides the binary used to test installation when
 # the user-facing name is not the executable on PATH (npx for expo, etc.).
 $global:WorkspaceTools = @(
@@ -91,6 +100,7 @@ $global:WorkspaceTools = @(
     [PSCustomObject]@{ Name='expo';       Category='Mobile';   Replaces='-';          Description='Expo CLI for React Native (cloud build via EAS)';       Example='npx expo start';     Probe='npx' }
     [PSCustomObject]@{ Name='glow';       Category='Misc';     Replaces='cat';        Description='Render Markdown with color in terminal';                Example='glow README.md' }
     [PSCustomObject]@{ Name='scoop';      Category='Misc';     Replaces='-';          Description='Windows package manager (admin-free)';                  Example='scoop install <tool>' }
+    [PSCustomObject]@{ Name='oh-my-posh'; Category='Misc';     Replaces='-';          Description='Cross-shell prompt engine (theme: workspace.omp.json)'; Example='oh-my-posh print primary' }
     [PSCustomObject]@{ Name='rtk';        Category='Misc';     Replaces='-';          Description='Token-optimizing CLI proxy for Claude Code';            Example='rtk gain' }
 )
 
@@ -198,6 +208,7 @@ function paths {
     $rows = @(
         @{ Key='Profile (all hosts, PS7+)';   Path=$PROFILE.CurrentUserAllHosts }
         @{ Key='Profile (current host)';      Path=$PROFILE.CurrentUserCurrentHost }
+        @{ Key='Oh My Posh theme';            Path="$env:USERPROFILE\Documents\PowerShell\workspace.omp.json" }
         @{ Key='WinPS 5.1 stub';              Path="$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" }
         @{ Key='Claude global settings';      Path="$env:USERPROFILE\.claude\settings.json" }
         @{ Key='Claude memory dir';           Path="$env:USERPROFILE\.claude\projects\C--Users-PC\memory" }

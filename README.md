@@ -21,10 +21,11 @@ The installer is idempotent: rerun it any time to re-sync after pulling new comm
 ## What it sets up
 
 - **Scoop buckets**: `main`, `extras`, `java`.
-- **57 packages via Scoop** (modern CLI replacements, runtimes, Kubernetes, IaC, mobile, cloud).
+- **58 packages via Scoop** (modern CLI replacements, runtimes, Kubernetes, IaC, mobile, cloud, prompt engine).
 - **3 Python tools via pip**: `httpie`, `posting`, `pgcli` (path is added to user `Path`).
 - **2 npm globals**: `wrangler`, `@expo/cli`.
 - **PowerShell profile** (`profile.ps1`) at `CurrentUserAllHosts`, plus a stub at `WindowsPowerShell\Microsoft.PowerShell_profile.ps1` so Windows PowerShell 5.1 inherits the same setup.
+- **Oh My Posh prompt** (`workspace.omp.json`) — a custom two-line theme matching the workspace palette (cyan paths, yellow git, magenta when dirty, gray timing). Initialized automatically by `profile.ps1` when `oh-my-posh` is on PATH.
 - **Claude Code `settings.json`** with permission rules and an empty attribution so commits stay clean.
 
 ## Profile commands
@@ -75,7 +76,7 @@ Every command supports `-Object` (where applicable) to return PSCustomObjects so
 | Kubernetes | kubectl, k9s, kubectx, kubens, helm, stern, dive, minikube, kind |
 | IaC        | terraform, pulumi |
 | Mobile     | flutter, expo |
-| Misc       | glow, scoop, rtk |
+| Misc       | glow, scoop, oh-my-posh, rtk |
 
 Run `cheat` for the full catalog with descriptions and examples.
 
@@ -105,6 +106,7 @@ dev-workspace/
   CHANGELOG.md                    release notes
   LICENSE                         MIT
   profile.ps1                     PowerShell 7+ profile (CurrentUserAllHosts)
+  workspace.omp.json              Oh My Posh theme matching the workspace palette
   windowsPowerShell-stub.ps1      Stub that makes Windows PowerShell 5.1 source profile.ps1
   settings.template.json          Claude Code settings template
   install.ps1                     Idempotent installer

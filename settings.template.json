@@ -159,7 +159,9 @@
       "PowerShell(paths:*)",
       "PowerShell(aliases-modern:*)",
       "Bash(rtk:*)",
-      "PowerShell(rtk:*)"
+      "PowerShell(rtk:*)",
+      "Bash(oh-my-posh:*)",
+      "PowerShell(oh-my-posh:*)"
     ],
     "ask": [
       "Bash(git reset:*)",

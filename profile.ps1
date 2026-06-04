@@ -14,6 +14,22 @@ function l   { eza --icons --git $args }
 function la  { eza --icons --git -la $args }
 function lt  { eza --icons --git --tree --level=2 $args }
 
+# Print this machine's SSH public key(s) and copy the first to the clipboard.
+function pubkey {
+    [CmdletBinding()] param()
+    $keys = Get-ChildItem "$env:USERPROFILE\.ssh\*.pub" -ErrorAction SilentlyContinue
+    if (-not $keys) {
+        Write-Warning "No SSH public key in ~\.ssh. Create one: ssh-keygen -t ed25519"
+        return
+    }
+    foreach ($k in $keys) {
+        Write-Host "  $($k.Name)" -ForegroundColor Cyan
+        Get-Content $k.FullName | Write-Host -ForegroundColor Green
+    }
+    Get-Content $keys[0].FullName -Raw | Set-Clipboard
+    Write-Host "  copied $($keys[0].Name) to clipboard" -ForegroundColor DarkGray
+}
+
 if (Get-Command zoxide -ErrorAction SilentlyContinue) {
     Invoke-Expression (& { (zoxide init powershell | Out-String) })
 }
@@ -283,6 +299,7 @@ function workspace {
         [PSCustomObject]@{ Command='rules';           Action='Claude Code permission rules summary' }
         [PSCustomObject]@{ Command='paths';           Action='Profile, settings, memory, scoop locations' }
         [PSCustomObject]@{ Command='aliases-modern';  Action='Active modern-CLI aliases' }
+        [PSCustomObject]@{ Command='pubkey';          Action='Print SSH public key + copy to clipboard' }
         [PSCustomObject]@{ Command='z <fragment>';    Action='Jump to dir by frequency (zoxide)' }
         [PSCustomObject]@{ Command='lazygit';         Action='Git TUI' }
         [PSCustomObject]@{ Command='k9s';             Action='Kubernetes TUI' }

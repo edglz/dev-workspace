@@ -45,7 +45,24 @@ function Test-ScoopBucket {
 
 function Test-ScoopPackage {
     param([string]$Name)
-    [bool](scoop list $Name 6>$null | Where-Object Name -eq $Name)
+    $entry = scoop list $Name 6>$null | Where-Object Name -eq $Name
+    # A half-completed install still shows in `scoop list` but carries an
+    # "Install failed" note. Treat that as not-installed so it gets retried.
+    [bool]$entry -and $entry.Info -notmatch 'Install failed'
+}
+
+# Remove any package left in a failed/partial state. Scoop refuses to cleanly
+# reinstall over leftover files, so a single interrupted install otherwise
+# blocks every future run. Clearing the app + persist dirs lets the retry work.
+function Clear-FailedScoopPackage {
+    param([string]$Name)
+    $entry = scoop list $Name 6>$null | Where-Object Name -eq $Name
+    if ($entry -and $entry.Info -match 'Install failed') {
+        scoop uninstall $Name 2>&1 | Out-Null
+        Remove-Item "$env:USERPROFILE\scoop\apps\$Name"    -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item "$env:USERPROFILE\scoop\persist\$Name" -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Done "cleaned failed install: $Name"
+    }
 }
 
 # 1. Scoop bootstrap, buckets, packages
@@ -76,8 +93,14 @@ if (-not $SkipScoop) {
     )
 
     Write-Step "Scoop packages ($($packages.Count))"
+    foreach ($p in $packages) { Clear-FailedScoopPackage $p }
     $missing = $packages | Where-Object { -not (Test-ScoopPackage $_) }
-    if ($missing) { scoop install @missing } else { Write-Skip 'all already installed' }
+    # Install one at a time so a single bad package can't abort the batch and
+    # leave the rest uninstalled. Each failure is reported but non-fatal.
+    foreach ($p in $missing) {
+        try { scoop install $p } catch { Write-Host "    warn: $p failed - $_" -ForegroundColor Yellow }
+    }
+    if (-not $missing) { Write-Skip 'all already installed' }
 
     foreach ($n in 'temurin21-jdk','maven','flutter') {
         if (Test-ScoopPackage $n) { scoop reset $n | Out-Null }

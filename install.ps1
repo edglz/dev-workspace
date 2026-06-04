@@ -163,9 +163,11 @@ if (-not $SkipSettings) {
         Copy-Item $target "$target.bak" -Force
         Write-Done "backup -> $target.bak"
         $current = Get-Content $target -Raw | ConvertFrom-Json
-        $current.attribution = $template.attribution
-        $current.permissions = $template.permissions
-        if ($template.hooks) { $current.hooks = $template.hooks }
+        # Add-Member -Force adds or overwrites; plain assignment throws on a
+        # missing property under Windows PowerShell 5.1.
+        $current | Add-Member -NotePropertyName attribution -NotePropertyValue $template.attribution -Force
+        $current | Add-Member -NotePropertyName permissions -NotePropertyValue $template.permissions -Force
+        if ($template.hooks) { $current | Add-Member -NotePropertyName hooks -NotePropertyValue $template.hooks -Force }
         $current | ConvertTo-Json -Depth 10 | Set-Content $target -Encoding UTF8
         Write-Done "merged into $target"
     } else {
